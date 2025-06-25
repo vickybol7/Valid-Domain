@@ -45,12 +45,14 @@ else:
 
 # Set up Selenium with headless Chrome
 options = Options()
+options.add_argument("--headless")
 driver = webdriver.Chrome(service=Service(), options=options)
 
 # Output CSV
 output_csv = "domains_with_contact_page.csv"
 with open(output_csv, mode='w', newline='', encoding='utf-8') as file:
     writer = csv.DictWriter(file, fieldnames=['contact_page'])
+    writer.writeheader()
 
     for domain in domains:
         contact_page = find_contact_page(driver, domain)
