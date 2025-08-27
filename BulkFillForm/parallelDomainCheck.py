@@ -49,11 +49,14 @@ def check_domain(domain):
             if original_domain in final_domain and not any(b in final_domain for b in BLOCKED_HOSTS):
                 print(f"{domain} - ✅ Active and not redirected to marketplace")
                 return domain
-            else:
-                print(f"{domain} - ⚠️ Redirected to {final_domain}, skipping")
-                return None
+            if any(b in final_domain for b in BLOCKED_HOSTS):
+                print(f"{domain} - ⚠️ Redirected to {final_domain}, trying next scheme")
+                continue
+            print(f"{domain} - ⚠️ Redirected to {final_domain}, skipping")
+            return None
         except requests.exceptions.RequestException as e:
             print(f"{domain} - ❌ Request failed - {e}")
+            continue
     return None
 
 # === Function to write results from queue to CSV ===
